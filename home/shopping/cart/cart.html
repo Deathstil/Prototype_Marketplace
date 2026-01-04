@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - Guildite</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Enhanced Base Styles ===== */
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #93c5fd;
+      --primary-extra-light: #e0f2fe;
+      --dark-bg: #0f172a;
+      --dark-secondary: #1e293b;
+      --dark-tertiary: #334155;
+      --light-bg: #f8fafc;
+      --light-secondary: #e2e8f0;
+      --light-tertiary: #f1f5f9;
+      --light-text: #f8fafc;
+      --dark-text: #0f172a;
+      --gray-text: #64748b;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --error-color: #ef4444;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+    }
+    
+    /* ===== Reset & Enhanced Base ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+      transition: var(--transition);
+      min-height: 100vh;
+    }
+    
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+    }
+    
+    /* ===== Enhanced Animations ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(-10px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    .animate-fade {
+      animation: fadeIn 0.4s ease forwards;
+    }
+    
+    .animate-slide {
+      animation: slideIn 0.3s ease forwards;
+    }
+    
+    .animate-pulse {
+      animation: pulse 1.5s infinite;
+    }
+    
+    .animate-bounce {
+      animation: bounce 0.5s ease;
+    }
+    
+    .animate-shake {
+      animation: shake 0.3s ease;
+    }
+    
+    /* ===== Enhanced Header Styles ===== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: rgba(15, 23, 42, 0.98);
+      padding: 1rem 2rem;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    body.dark-mode .site-header {
+      background-color: rgba(15, 23, 42, 0.98);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 1rem;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    
+    .brand:hover {
+      transform: translateY(-1px);
+    }
+    
+    .brand-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--border-radius-sm);
+      transition: var(--transition);
+    }
+    
+    .brand-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      letter-spacing: 0.5px;
+      transition: var(--transition);
+    }
+    
+    .brand:hover .brand-name {
+      color: white;
+    }
+    
+    .main-nav {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .nav-link {
+      color: var(--light-text);
+      font-weight: 500;
+      font-size: 1rem;
+      transition: var(--transition);
+      position: relative;
+      padding: 0.5rem 0;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .nav-link.active {
+      font-weight: 600;
+    }
+    
+    .nav-link.active::after {
+      width: 100%;
+    }
+    
+    .user-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--light-text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      padding: 0.5rem;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .icon-btn:hover {
+      color: var(--primary-color);
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    .icon-btn:focus {
+      outline: 2px solid var(--primary-light);
+      outline-offset: 2px;
+    }
+    
+    .cart-btn {
+      position: relative;
+    }
+    
+    .cart-badge {
+      position: absolute;
+      top: -0.25rem;
+      right: -0.25rem;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      width: 1.25rem;
+      height: 1.25rem;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: var(--transition);
+    }
+    
+    .profile-dropdown {
+      position: relative;
+    }
+    
+    .user-avatar {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+    }
+    
+    .user-avatar:hover {
+      border-color: var(--primary-color);
+      transform: scale(1.05);
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: var(--dark-secondary);
+      min-width: 12rem;
+      box-shadow: var(--card-shadow-hover);
+      z-index: 100;
+      border-radius: var(--border-radius-sm);
+      overflow: hidden;
+      animation: fadeIn 0.2s ease-out;
+      margin-top: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .dropdown-content a {
+      color: var(--light-text);
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      display: block;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    
+    .dropdown-content a:hover {
+      background-color: var(--primary-dark);
+      padding-left: 1.25rem;
+    }
+    
+    .dropdown-content a i {
+      margin-right: 0.5rem;
+      width: 1rem;
+      text-align: center;
+    }
+    
+    .profile-dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    /* ===== Enhanced Main Content ===== */
+    .main-content {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr minmax(300px, 350px);
+      gap: 2rem;
+      min-height: calc(100vh - 10rem);
+    }
+    
+    @media (max-width: 1024px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .order-summary {
+    /* Disable sticky behavior when it moves to grid-row: 1 */
+    position: static; 
+  }
+    }
+    
+    /* ===== Enhanced Cart Items ===== */
+    .cart-section {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+    }
+    
+    body.dark-mode .cart-section {
+      background-color: var(--dark-secondary);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    body.dark-mode .section-title {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    
+    .cart-item {
+      display: flex;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      border-radius: var(--border-radius-sm);
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      background-color: var(--card-bg);
+      position: relative;
+    }
+    
+    body.dark-mode .cart-item {
+      border-color: rgba(255, 255, 255, 0.05);
+      background-color: var(--dark-tertiary);
+    }
+    
+    .cart-item:hover {
+      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-2px);
+    }
+    
+    .cart-item-image {
+      width: 7.5rem;
+      height: 7.5rem;
+      border-radius: var(--border-radius-sm);
+      object-fit: cover;
+      flex-shrink: 0;
+      align-self: center;
+      transition: transform 0.3s ease;
+    }
+    
+    .cart-item:hover .cart-item-image {
+      transform: scale(1.03);
+    }
+    
+    .cart-item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    
+    .cart-item-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--dark-text);
+      transition: color 0.3s ease;
+    }
+    
+    body.dark-mode .cart-item-title {
+      color: var(--light-text);
+    }
+    
+    .cart-item-seller {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .seller-avatar {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .cart-item-seller:hover .seller-avatar {
+      transform: scale(1.1);
+    }
+    
+    .cart-item-price {
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 0.5rem 0;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+    
+    .original-price {
+      text-decoration: line-through;
+      color: var(--gray-text);
+      font-size: 0.9rem;
+      margin-left: 0.5rem;
+    }
+    
+    .cart-item-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .quantity-btn {
+      width: 2rem;
+      height: 2rem;
+      border-radius: var(--border-radius-sm);
+      background-color: var(--light-secondary);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+    }
+    
+    body.dark-mode .quantity-btn {
+      background-color: var(--dark-secondary);
+      color: var(--light-text);
+    }
+    
+    .quantity-btn:hover {
+      background-color: var(--primary-light);
+      color: var(--dark-text);
+    }
+    
+    body.dark-mode .quantity-btn:hover {
+      color: var(--light-text);
+    }
+    
+    .quantity-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .quantity-btn:disabled:hover {
+      background-color: var(--light-secondary);
+    }
+    
+    body.dark-mode .quantity-btn:disabled:hover {
+      background-color: var(--dark-secondary);
+    }
+    
+    .quantity-input {
+      width: 2.5rem;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.25rem;
+      border-radius: var(--border-radius-sm);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+    }
+    
+    body.dark-mode .quantity-input {
+      color: var(--light-text);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .quantity-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    
+    .remove-btn {
+      background: none;
+      border: none;
+      color: var(--error-color);
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      padding: 0.5rem;
+      border-radius: var(--border-radius-sm);
+    }
+    
+    .remove-btn:hover {
+      background-color: rgba(239, 68, 68, 0.1);
+      transform: translateX(-2px);
+    }
+    
+    body.dark-mode .remove-btn:hover {
+      background-color: rgba(239, 68, 68, 0.2);
+    }
+    
+    .save-btn {
+      background: none;
+      border: none;
+      color: var(--warning-color);
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      padding: 0.5rem;
+      border-radius: var(--border-radius-sm);
+    }
+    
+    .save-btn:hover {
+      background-color: rgba(245, 158, 11, 0.1);
+      transform: translateX(-2px);
+    }
+    
+    body.dark-mode .save-btn:hover {
+      background-color: rgba(245, 158, 11, 0.2);
+    }
+    
+    /* ===== Enhanced Empty Cart ===== */
+    .empty-cart {
+      text-align: center;
+      padding: 3rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .empty-cart-icon {
+      font-size: 3.5rem;
+      color: var(--gray-text);
+      margin-bottom: 0.5rem;
+      opacity: 0.7;
+      animation: bounce 2s infinite;
+    }
+    
+    .empty-cart-message {
+      font-size: 1.25rem;
+      color: var(--dark-text);
+      font-weight: 500;
+    }
+    
+    body.dark-mode .empty-cart-message {
+      color: var(--light-text);
+    }
+    
+    .empty-cart-submessage {
+      color: var(--gray-text);
+      max-width: 30rem;
+      margin: 0 auto;
+    }
+    
+    .continue-shopping {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: var(--border-radius-sm);
+      text-decoration: none;
+      transition: var(--transition);
+      font-weight: 500;
+      margin-top: 1rem;
+    }
+    
+    .continue-shopping:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3), 0 2px 4px -1px rgba(37, 99, 235, 0.1);
+    }
+    
+    /* ===== Enhanced Order Summary ===== */
+    .order-summary {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      height: fit-content;
+      position: sticky;
+      top: 6rem;
+      transition: var(--transition);
+    }
+    
+    body.dark-mode .order-summary {
+      background-color: var(--dark-secondary);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+    
+    .summary-label {
+      color: var(--gray-text);
+    }
+    
+    .summary-value {
+      font-weight: 500;
+    }
+    
+    .summary-total {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin: 1.5rem 0;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    body.dark-mode .summary-total {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .checkout-btn {
+      width: 100%;
+      padding: 0.875rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+    }
+    
+    .checkout-btn:hover:not(:disabled) {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3), 0 2px 4px -1px rgba(37, 99, 235, 0.1);
+    }
+    
+    .checkout-btn:disabled {
+      background-color: var(--gray-text);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    .payment-methods {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .payment-method {
+      width: 2.5rem;
+      height: 1.75rem;
+      object-fit: contain;
+      filter: grayscale(30%);
+      opacity: 0.7;
+      transition: var(--transition);
+    }
+    
+    .payment-method:hover {
+      filter: grayscale(0);
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+    
+    /* ===== Enhanced Coupon Section ===== */
+    .coupon-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed rgba(0, 0, 0, 0.15);
+    }
+    
+    body.dark-mode .coupon-section {
+      border-top-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .coupon-title {
+      font-size: 0.95rem;
+      color: var(--gray-text);
+      margin-bottom: 0.5rem;
+    }
+    
+    .coupon-input {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    
+    .coupon-input input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: var(--border-radius-sm);
+      font-size: 0.9rem;
+      transition: var(--transition);
+      background-color: var(--light-tertiary);
+    }
+    
+    body.dark-mode .coupon-input input {
+      background-color: var(--dark-tertiary);
+      color: var(--light-text);
+    }
+    
+    .coupon-input input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    
+    .apply-coupon {
+      padding: 0 1rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    
+    .apply-coupon:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    
+    .coupon-success {
+      color: var(--success-color);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .discount-badge {
+      background-color: var(--success-color);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+    
+    /* ===== Enhanced Toast Notification ===== */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem 1.25rem;
+      border-radius: var(--border-radius-sm);
+      box-shadow: var(--card-shadow-hover);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      max-width: 24rem;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .toast i {
+      font-size: 1.25rem;
+    }
+    
+    .toast.success {
+      background-color: var(--success-color);
+    }
+    
+    .toast.error {
+      background-color: var(--error-color);
+    }
+    
+    .toast.warning {
+      background-color: var(--warning-color);
+    }
+    
+    .toast-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: var(--transition);
+    }
+    
+    .toast-close:hover {
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+    
+    /* ===== Save for Later Section ===== */
+    .save-for-later {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    body.dark-mode .save-for-later {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* ===== Responsive Design Improvements ===== */
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 0 1rem;
+        margin: 1rem auto;
+      }
+      
+      .site-header {
+        padding: 0.75rem 1rem;
+      }
+      
+      .header-content {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      
+      .main-nav {
+        order: 3;
+        width: 100%;
+        justify-content: space-around;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+      }
+      
+      .user-controls {
+        margin-left: auto;
+      }
+      
+      .cart-item {
+        flex-direction: column;
+      }
+      
+      .cart-item-image {
+        width: 100%;
+        height: auto;
+        max-height: 12rem;
+      }
+      
+      .cart-item-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .quantity-control {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .brand-name {
+        font-size: 1.25rem;
+      }
+      
+      .user-controls {
+        gap: 0.5rem;
+      }
+      
+      .icon-btn {
+        width: 2rem;
+        height: 2rem;
+        font-size: 1rem;
+      }
+      
+      .user-avatar {
+        width: 2rem;
+        height: 2rem;
+      }
+      
+      .coupon-input {
+        flex-direction: column;
+      }
+      
+      .apply-coupon {
+        padding: 0.75rem;
+      }
+    }
+    
+    /* ===== Accessibility Improvements ===== */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    
+    /* ===== Loading State ===== */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .loading-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .loading-spinner {
+      width: 3rem;
+      height: 3rem;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* ===== Tooltip ===== */
+    .tooltip {
+      position: relative;
+    }
+    
+    .tooltip-text {
+      visibility: hidden;
+      width: 120px;
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+      text-align: center;
+      border-radius: var(--border-radius-sm);
+      padding: 0.5rem;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+    }
+    
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* ===== Floating Action Button ===== */
+    .fab {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      z-index: 100;
+      transition: var(--transition);
+      animation: pulse 2s infinite;
+    }
+    
+    .fab:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px) scale(1.05);
+    }
+    
+    /* ===== Price Change Animation ===== */
+    @keyframes priceChange {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
+    .price-change {
+      animation: priceChange 0.5s ease;
+    }
+    
+    /* ===== Confetti Effect ===== */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      opacity: 0;
+      z-index: 9999;
+      animation: confettiFall 3s ease-in-out forwards;
+    }
+    
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* ===== Delivery Options Styles ===== */
+.delivery-options {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.delivery-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 2px solid var(--light-secondary);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  background-color: var(--light-tertiary);
+}
+
+body.dark-mode .delivery-option {
+  background-color: var(--dark-tertiary);
+  border-color: var(--dark-secondary);
+}
+
+.delivery-option:hover {
+  border-color: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.delivery-option input[type="radio"] {
+  margin: 0;
+}
+
+.delivery-option i {
+  color: var(--primary-color);
+  width: 1rem;
+  text-align: center;
+}
+
+.delivery-option input[type="radio"]:checked + i + span {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.delivery-option:has(input[type="radio"]:checked) {
+  border-color: var(--primary-color);
+  background-color: var(--primary-extra-light);
+}
+
+body.dark-mode .delivery-option:has(input[type="radio"]:checked) {
+  background-color: rgba(37, 99, 235, 0.2);
+  border-color: var(--primary-color);
+}
+
+/* ===== Enhanced Delivery Options Styles ===== */
+.delivery-options {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.delivery-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 2px solid var(--light-secondary);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    background-color: var(--light-tertiary);
+    position: relative;
+}
+
+body.dark-mode .delivery-option {
+    background-color: var(--dark-tertiary);
+    border-color: var(--dark-secondary);
+}
+
+.delivery-option:hover {
+    border-color: var(--primary-light);
+    transform: translateY(-1px);
+}
+
+.delivery-option input[type="radio"] {
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+}
+
+.delivery-option i {
+    color: var(--gray-text);
+    width: 1rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+/* Selected state */
+.delivery-option:has(input[type="radio"]:checked) {
+    border-color: var(--primary-color);
+    background-color: var(--primary-extra-light);
+}
+
+body.dark-mode .delivery-option:has(input[type="radio"]:checked) {
+    background-color: rgba(37, 99, 235, 0.2);
+    border-color: var(--primary-color);
+}
+
+.delivery-option:has(input[type="radio"]:checked) i {
+    color: var(--primary-color);
+}
+
+/* Required field indicator */
+.delivery-options::before {
+    content: "Required *";
+    font-size: 0.8rem;
+    color: var(--error-color);
+    font-weight: 500;
+    margin-bottom: -0.5rem;
+}
+
+/* Checkout button disabled state */
+.checkout-btn:disabled {
+    background-color: var(--gray-text);
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.checkout-btn:disabled:hover {
+    background-color: var(--gray-text);
+    transform: none !important;
+    box-shadow: none !important;
+}
+/* ===== Enhanced Delivery Options Styles ===== */
+.delivery-options {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.delivery-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 2px solid var(--light-secondary);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    background-color: var(--light-tertiary);
+    position: relative;
+}
+
+body.dark-mode .delivery-option {
+    background-color: var(--dark-tertiary);
+    border-color: var(--dark-secondary);
+}
+
+.delivery-option:hover {
+    border-color: var(--primary-light);
+    transform: translateY(-1px);
+}
+
+.delivery-option input[type="radio"] {
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.delivery-option i {
+    color: var(--gray-text);
+    width: 1rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.delivery-option span {
+    transition: var(--transition);
+}
+
+/* Selected state */
+.delivery-option:has(input[type="radio"]:checked) {
+    border-color: var(--primary-color);
+    background-color: var(--primary-extra-light);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+}
+
+body.dark-mode .delivery-option:has(input[type="radio"]:checked) {
+    background-color: rgba(37, 99, 235, 0.2);
+    border-color: var(--primary-color);
+}
+
+.delivery-option:has(input[type="radio"]:checked) i,
+.delivery-option:has(input[type="radio"]:checked) span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Required field indicator */
+.delivery-options::before {
+    content: "Required *";
+    font-size: 0.8rem;
+    color: var(--error-color);
+    font-weight: 500;
+    margin-bottom: -0.5rem;
+}
+
+/* Checkout button disabled state */
+.checkout-btn:disabled {
+    background-color: var(--gray-text);
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.checkout-btn:disabled:hover {
+    background-color: var(--gray-text);
+    transform: none !important;
+    box-shadow: none !important;
+}
+  </style>
+</head>
+
+<body class="light-mode">
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-content">
+      <a href="../../market/market.html" class="brand">
+        <img src="../../../images/logo ssi.png" alt="Guildite Logo" class="brand-icon">
+        <span class="brand-name">Guildite</span>
+      </a>
+      
+      <nav class="main-nav">
+        <a href="../../market/market.html" class="nav-link">Home</a>
+      </nav>
+      
+      <div class="user-controls">
+        <button id="darkModeToggle" class="icon-btn tooltip" aria-label="Toggle Dark Mode">
+          <i class="fas fa-moon"></i>
+          <span class="tooltip-text">Toggle Dark Mode</span>
+        </button>
+        <a href="../wishlist/wishlist.html" class="icon-btn tooltip" aria-label="Wishlist">
+          <span>
+          <i class="fas fa-heart"></i>
+          </span>
+          <span class="tooltip-text">Wishlist</span>
+        </a>
+        
+        <div class="profile-dropdown">
+          <img src="../../../images/no profile pic.jpg" alt="User Profile" class="user-avatar">
+          <div class="dropdown-content">
+            <a href="../../profile/profile.html"><i class="fas fa-user"></i> Profile</a>
+            <a href="../orders/orders.html"><i class="fas fa-box"></i> Orders</a>
+            <a href="../../delivery/delivery.html"><i class="fas fa-shipping-fast"></i>Carriers</a>
+            <a href="../../seller/testsell.html"><i class="fas fa-plus-circle"></i> Seller Workshop</a>
+            <a href="../../community/community.html"><i class="fas fa-users"></i>Guild Hall</a>
+            <a href="../../map/map.html"><i class="fas fa-map-marker-alt"></i>Map</a>
+            <a href="../../home.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i>Leave Guildite</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Cart Items Section -->
+    <section class="cart-section">
+      <h2 class="section-title">
+        Your Shopping Cart
+        <span id="item-count">0 items</span>
+      </h2>
+      
+      <div class="cart-items" id="cart-items">
+        <!-- Cart items will be inserted here by JavaScript -->
+      </div>
+      
+      <!-- Empty Cart Message -->
+      <div class="empty-cart" id="empty-cart">
+        <div class="empty-cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h3 class="empty-cart-message">Your cart is empty</h3>
+        <p class="empty-cart-submessage">Looks like you haven't added anything to your Guild cart yet. Let's get shopping!</p>
+        <a href="../../market/market.html" class="continue-shopping">
+          <i class="fas fa-arrow-left"></i> Continue Shopping
+        </a>
+      </div>
+      
+      <!-- Save for Later Section -->
+      <div class="save-for-later" id="save-for-later">
+        <h2 class="section-title">Saved for Later</h2>
+        <div class="cart-items" id="saved-items">
+          <!-- Saved items will be inserted here by JavaScript -->
+        </div>
+        
+        <!-- Empty Saved Items Message -->
+        <div class="empty-cart" id="empty-saved">
+          <div class="empty-cart-icon">
+            <i class="fas fa-bookmark"></i>
+          </div>
+          <h3 class="empty-cart-message">No saved items</h3>
+          <p class="empty-cart-submessage">Items you save for later will appear here</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Order Summary Section -->
+    <aside class="order-summary">
+  <h2 class="section-title">Order Summary</h2>
+  
+  <div class="summary-row">
+    <span class="summary-label">Subtotal</span>
+    <span class="summary-value" id="subtotal">GHC 0.00</span>
+  </div>
+
+  <!-- Delivery Options -->
+  <div class="delivery-options">
+    <label class="delivery-option">
+        <input type="radio" name="delivery" value="delivery">
+        <i class="fas fa-truck"></i>
+        <span>Delivery (GHC 5.00)</span>
+    </label>
+    <label class="delivery-option">
+        <input type="radio" name="delivery" value="pickup">
+        <i class="fas fa-store"></i>
+        <span>Pickup (FREE)</span>
+    </label>
+</div>
+
+  <div class="summary-row">
+    <span class="summary-label">Delivery Fee</span>
+    <span class="summary-value" id="delivery-fee">GHC 5.00</span>
+  </div>
+
+  <div class="summary-row">
+    <span class="summary-label">Estimated Tax</span>
+    <span class="summary-value" id="tax">GHC 0.00</span>
+  </div>
+      
+      <div class="coupon-section">
+        <p class="coupon-title">Have a coupon code?</p>
+        <div class="coupon-input">
+          <input type="text" id="couponCode" placeholder="Enter coupon code">
+          <button class="apply-coupon" id="applyCoupon">Apply</button>
+        </div>
+        <div class="coupon-success" id="couponSuccess">
+          <i class="fas fa-check-circle"></i>
+          <span>Coupon applied successfully! <span class="discount-badge">10% OFF</span></span>
+        </div>
+      </div>
+      
+      <div class="summary-row summary-total">
+        <span>Total</span>
+        <span id="total">GHC 0.00</span>
+      </div>
+      
+      <button class="checkout-btn" id="checkout-btn" disabled>
+        <i class="fas fa-lock"></i> Proceed to Checkout
+      </button>
+      
+      <div class="payment-methods">
+        <i class="fa-brands fa-cc-visa payment-method"></i>
+        <i class="fa-brands fa-cc-mastercard payment-method"></i>
+        <i class="fa-brands fa-cc-paypal payment-method"></i>
+        <i class="fa-brands fa-apple-pay payment-method"></i>
+      </div>      
+    </aside>
+  </main>
+
+  <!-- Floating Action Button -->
+  <div class="fab" id="fab" title="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Item added to cart</span>
+    <button class="toast-close" id="toastClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+<script type="module">
+// --- Firebase Imports ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, 
+  setDoc,
+  getDoc,
+  onSnapshot,
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+// --- Firebase Config ---
+const firebaseConfig = {
+  apiKey: "AIzaSyBzPa671GH71UvTcZ3dECFPrW4xe1vS9ds",
+  authDomain: "marketplace-e0bff.firebaseapp.com",
+  projectId: "marketplace-e0bff",
+  storageBucket: "marketplace-e0bff.appspot.com",
+  messagingSenderId: "892936444768",
+  appId: "1:892936444768:web:f595b3a3e5d697988e1c05",
+  databaseURL: "https://marketplace-e0bff-default-rtdb.europe-west1.firebasedatabase.app"
+};
+
+// --- Init ---
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+
+// --- CLOUD SYNC FUNCTIONS ---
+let isCloudSyncActive = false;
+
+// Save to cloud when localStorage changes (use namespaced keys)
+async function mirrorLocalToCloud(uid, toyName, role = 'buyer') {
+  if (!uid || !toyName || uid === 'anon') return;
+  
+  try {
+    const key = nsKey(toyName, { role, uid });
+    const localValue = localStorage.getItem(key);
+    
+    if (!localValue) return;
+    
+    // Use consistent Firestore path: users/{uid}/toys/{toyName}__{role}
+    const firestorePath = `${toyName}__${role}`;
+    await setDoc(doc(firestore, 'users', uid, 'toys', firestorePath), {
+      value: localValue,
+      key: key,
+      toyName: toyName,
+      role: role,
+      uid: uid,
+      updatedAt: serverTimestamp(),
+      localUpdated: new Date().toISOString()
+    });
+    console.log("💾 Saved to cloud:", toyName, "role:", role);
+  } catch (error) {
+    console.log("💾 Cloud save failed:", toyName, error.message);
+  }
+}
+
+// Load from cloud when local is empty (use namespaced keys)
+async function restoreCloudToLocal(uid, toyName, role = 'buyer') {
+  if (!uid || !toyName || uid === 'anon') return false;
+  
+  try {
+    const key = nsKey(toyName, { role, uid });
+    const oldKey = `${toyName}_${uid}`; // Check old format for migration
+    
+    // Only restore if local is empty (check both formats)
+    if (localStorage.getItem(key) || localStorage.getItem(oldKey)) return false;
+    
+    // Try new format first: users/{uid}/toys/{toyName}__{role}
+    const firestorePath = `${toyName}__${role}`;
+    let docSnap = await getDoc(doc(firestore, 'users', uid, 'toys', firestorePath));
+    
+    // Fallback to old format for migration
+    if (!docSnap.exists()) {
+      docSnap = await getDoc(doc(firestore, 'users', uid, 'toys', toyName));
+      if (docSnap.exists()) {
+        const cloudData = docSnap.data();
+        localStorage.setItem(key, cloudData.value);
+        console.log("📥 Migrated from cloud (old format):", toyName);
+        return true;
+      }
+    }
+    
+    if (docSnap.exists()) {
+      const cloudData = docSnap.data();
+      localStorage.setItem(key, cloudData.value);
+      console.log("📥 Loaded from cloud:", toyName, "role:", role);
+      return true;
+    }
+  } catch (error) {
+    console.log("📥 Cloud load failed:", toyName, error.message);
+  }
+  return false;
+}
+
+// Start cloud sync (use namespaced keys)
+async function startCloudSync(uid) {
+  if (!uid || uid === 'anon' || isCloudSyncActive) return;
+  
+  const role = detectPageRole() || 'buyer';
+  console.log("💾 Starting cloud sync for user:", uid, "role:", role);
+  isCloudSyncActive = true;
+  
+  // Define which toys to sync
+  const TOYS_TO_SYNC = ['cart', 'savedItems', 'orders', 'profile'];
+  
+  try {
+    // 1. Load any missing toys from cloud first
+    for (const toy of TOYS_TO_SYNC) {
+      await restoreCloudToLocal(uid, toy, role);
+    }
+    
+    // 2. Listen for cloud updates from other devices
+    TOYS_TO_SYNC.forEach(toy => {
+      // Use consistent Firestore path: users/{uid}/toys/{toyName}__{role}
+      const firestorePath = `${toy}__${role}`;
+      const docRef = doc(firestore, 'users', uid, 'toys', firestorePath);
+      
+      onSnapshot(docRef, (docSnap) => {
+        if (!docSnap.exists()) return;
+        
+        const cloudData = docSnap.data();
+        const key = nsKey(toy, { role, uid });
+        const localValue = localStorage.getItem(key);
+        
+        // Update if cloud has newer data
+        const cloudTime = cloudData.updatedAt?.toMillis?.() || 0;
+        const localTime = parseInt(localStorage.getItem(`${key}_timestamp`) || '0', 10);
+        
+        if (cloudTime > localTime) {
+          localStorage.setItem(key, cloudData.value);
+          localStorage.setItem(`${key}_timestamp`, cloudTime.toString());
+          console.log("🔄 Cloud update received:", toy, "role:", role);
+          
+          // Trigger UI refresh if we're on cart page
+          if (toy === 'cart' && typeof updateCartDisplay === 'function') {
+            setTimeout(() => updateCartDisplay(), 100);
+          }
+        }
+      }, (error) => {
+        console.log("🔄 Cloud sync listener error:", toy, error.message);
+      });
+    });
+    
+    console.log("✅ Cloud sync active");
+    
+  } catch (error) {
+    console.error("❌ Cloud sync failed:", error);
+    isCloudSyncActive = false;
+  }
+}
+
+// Modify localStorage setItem to auto-sync (use namespaced keys)
+function setupAutoSync(uid) {
+  const originalSetItem = localStorage.setItem;
+  const TOYS_TO_SYNC = ['cart', 'savedItems', 'orders', 'profile'];
+  const role = detectPageRole() || 'buyer';
+  
+  localStorage.setItem = function(key, value) {
+    originalSetItem.call(this, key, value);
+    
+    // Auto-save to cloud when synced toys change (check namespaced keys)
+    TOYS_TO_SYNC.forEach(toy => {
+      const expectedKey = nsKey(toy, { role, uid });
+      if (key === expectedKey) {
+        localStorage.setItem(`${key}_timestamp`, Date.now().toString());
+        // Debounce cloud sync
+        clearTimeout(setupAutoSync._timers?.[key]);
+        if (!setupAutoSync._timers) setupAutoSync._timers = {};
+        setupAutoSync._timers[key] = setTimeout(() => {
+          mirrorLocalToCloud(uid, toy, role);
+        }, 500);
+      }
+    });
+  };
+}
+
+// ---------- Namespaced storage helpers (UID-scoped cart/wishlist/orders) ----------
+function getUid() {
+  return sessionStorage.getItem('uid') || 'anon';
+}
+
+function detectPageRole() {
+  try { 
+    const r = document?.body?.dataset?.role; 
+    if (r) return r.toLowerCase(); 
+  } catch(e){}
+  
+  const p = window.location.pathname.toLowerCase();
+  if (p.includes('testsell') || p.includes('/seller') || p.includes('seller')) return 'seller';
+  if (p.includes('delivery') || p.includes('courier')) return 'courier';
+  return 'buyer';
+}
+
+function nsKey(base, { role=null, uid=null } = {}) {
+  const finalRole = role || detectPageRole() || 'buyer';
+  const finalUid = uid || getUid() || 'anon';
+  return `${base}__${finalRole}__${String(finalUid)}`;
+}
+
+function readJsonKey(key, fallback = []) {
+  try { 
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback; 
+  } catch(e){ 
+    return fallback; 
+  }
+}
+
+function writeJsonKey(key, data) {
+  try { 
+    localStorage.setItem(key, JSON.stringify(data || [])); 
+  } catch(e){
+    console.warn('writeJsonKey failed:', e);
+  }
+}
+
+// convenience for this page (use namespaced keys)
+function getCartKey(){ 
+  return nsKey('cart'); // Returns: cart__buyer__{uid}
+}
+
+function getSavedKey(){ 
+  return nsKey('savedItems'); // Returns: savedItems__buyer__{uid}
+}
+
+function getOrdersKey(){ 
+  return nsKey('orders'); // Returns: orders__buyer__{uid}
+}
+
+// ----------------- GLOBAL ORDERS (shared truth) -----------------
+const ORDERS_GLOBAL = "orders_global";
+function getGlobalOrders(){
+  try { return JSON.parse(localStorage.getItem(ORDERS_GLOBAL) || '[]'); }
+  catch(e){ return []; }
+}
+
+function saveGlobalOrders(data){
+  try { 
+    localStorage.setItem(ORDERS_GLOBAL, JSON.stringify(data || [])); 
+    
+    // Also sync orders to cloud if user is logged in (use namespaced keys)
+    const uid = getUid();
+    const role = detectPageRole() || 'buyer';
+    if (uid && uid !== 'anon') {
+      const ordersKey = nsKey('orders', { role, uid });
+      localStorage.setItem(ordersKey, JSON.stringify(data || []));
+      mirrorLocalToCloud(uid, 'orders', role);
+    }
+  } catch(e){ 
+    console.warn('saveGlobalOrders failed', e); 
+  }
+}
+
+// --- DOM & app logic ---
+document.addEventListener('DOMContentLoaded', async () => {
+  // Wait for auth to be ready before starting sync
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      sessionStorage.setItem('uid', uid);
+      
+      // Start cloud sync
+      await startCloudSync(uid);
+      setupAutoSync(uid);
+    }
+  });
+  
+  // ... REST OF YOUR EXISTING CODE STAYS THE SAME ...
+  // All your existing cart functions, UI logic, etc.
+  // Just use the modified getCartKey(), getSavedKey(), getOrdersKey() functions
+  
+  // When user checks out, ensure sync happens
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', async () => {
+      // ... your existing checkout logic ...
+      
+      // After checkout, force sync
+      const uid = getUid();
+      if (uid && uid !== 'anon') {
+        await mirrorLocalToCloud(uid, 'cart');
+        await mirrorLocalToCloud(uid, 'orders');
+      }
+    });
+  }
+});
+
+// --- Modified Auth Handling to include cloud sync ---
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "../../../index.html";
+    return;
+  }
+
+  try { 
+    sessionStorage.setItem('uid', user.uid); 
+    
+    // Start cloud sync when user is authenticated
+    await startCloudSync(user.uid);
+    setupAutoSync(user.uid);
+  } catch(e){}
+
+  const userRef = ref(database, `users/${user.uid}`);
+  try {
+    const snapshot = await get(userRef);
+    if (!snapshot.exists()) {
+      window.location.href = "../../../index.html";
+      return;
+    }
+    
+    const userData = snapshot.val();
+    if (userData.declined) { 
+      window.location.href = "../../../adminlogic/declined/declined.html"; 
+      return; 
+    }
+    if (userData.banned) { 
+      window.location.href = "../../../adminlogic/banned/banned.html"; 
+      return; 
+    }
+
+    // Update avatar
+    const avatarEl = document.querySelector('.user-avatar');
+    if (avatarEl) {
+      avatarEl.src = userData.profilePictureUrl || "../../../images/no profile pic.jpg";
+      avatarEl.alt = (userData.name || "User") + "'s profile picture";
+    }
+  } catch(err){
+    console.warn('Auth lookup failed', err);
+  }
+});
+
+// Logout
+if (document.getElementById('logoutBtn')) {
+  document.getElementById('logoutBtn').addEventListener("click", async (e) => {
+    e.preventDefault();
+    await signOut(auth);
+    sessionStorage.removeItem('uid');
+    localStorage.clear(); // Clear local data on logout
+    window.location.href = "../../../index.html";
+  });
+}
+
+// Dark Mode Toggle
+const darkModeToggle = document.getElementById('darkModeToggle');
+if (darkModeToggle) {
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    darkModeToggle.querySelector('i').classList.remove('fa-moon');
+    darkModeToggle.querySelector('i').classList.add('fa-sun');
+  }
+  
+  darkModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    
+    const icon = darkModeToggle.querySelector('i');
+    if (isDark) {
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    } else {
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+    }
+  });
+}
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In - Guildite</title>
+  <style>
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('images/market-background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.welcome-heading {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 30px;
+  line-height: 1.4;
+}
+
+.marketplace-glow {
+  font-size: 32px;
+  font-weight: bold;
+  color: #00ffcc;
+  text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc;
+  animation: glowPulse 2s ease-in-out infinite alternate;
+  letter-spacing: 2px;
+  display: inline-block;
+}
+
+/* Animation */
+@keyframes glowPulse {
+  from {
+    text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc, 0 0 15px #00ffcc;
+  }
+  to {
+    text-shadow: 0 0 15px #00ffcc, 0 0 30px #00ffcc, 0 0 45px #00ffcc;
+  }
+}
+
+.auth-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.auth-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.auth-container button:hover {
+  background-color: #218838;
+}
+
+.auth-links {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.auth-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 480px) {
+  .welcome-heading {
+    font-size: 20px;
+  }
+
+  .marketplace-glow {
+    font-size: 26px;
+  }
+
+  .auth-container {
+    padding: 30px 20px;
+    width: 90%;
+  }
+}
+
+  </style>
+  
+</head>
+<body>
+  <div class="auth-container">
+    <h2 class="welcome-heading">
+      Welcome to <br><span class="marketplace-glow">Guildite</span>
+    </h2>
+    
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit" id="loginBtn">Sign In</button>
+      </form>      
+    
+    <div class="auth-links">
+      <p><a href="#">Forgot password?</a></p>
+      <p>Don’t have an account? <a href="signup/signup.html">Sign Up here</a></p>
+    </div>
+  </div>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+  import { 
+    getFirestore, 
+    doc, 
+    setDoc,
+    getDoc,
+    onSnapshot,
+    serverTimestamp 
+  } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+  // ✅ Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBzPa671GH71UvTcZ3dECFPrW4xe1vS9ds",
+    authDomain: "marketplace-e0bff.firebaseapp.com",
+    projectId: "marketplace-e0bff",
+    storageBucket: "marketplace-e0bff.appspot.com",
+    messagingSenderId: "892936444768",
+    appId: "1:892936444768:web:f595b3a3e5d697988e1c05",
+    databaseURL: "https://marketplace-e0bff-default-rtdb.europe-west1.firebasedatabase.app"
+  };
+
+  // ✅ Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+  const firestore = getFirestore(app);
+
+  // 🎯 ALL 7 TOYS THAT SHOULD EXIST
+  const ALL_TOYS = ['cart', 'wishlist', 'orders', 'products', 'sales', 'deliveries', 'profile'];
+
+  // Helper: Create namespaced key (STANDARD FORMAT: toy__role__uid)
+  function nsKey(toyName, role = 'buyer', uid) {
+    return `${toyName}__${role}__${uid}`;
+  }
+
+  // ---------------------- BASIC TOY CREATION (NO SYNC YET) ----------------------
+  function createBasicToys(uid, role = 'buyer') {
+    if (!uid) return;
+    
+    console.log("🎮 Creating basic toys for user:", uid, "role:", role);
+    
+    // Create ALL toys ONLY in localStorage (no cloud yet)
+    // Use namespaced keys: toy__role__uid
+    for (const toy of ALL_TOYS) {
+      const key = nsKey(toy, role, uid);
+      const oldKey = `${toy}_${uid}`; // Check for old format for migration
+      
+      // Migrate from old format if exists
+      if (localStorage.getItem(oldKey) && !localStorage.getItem(key)) {
+        const oldData = localStorage.getItem(oldKey);
+        localStorage.setItem(key, oldData);
+        localStorage.removeItem(oldKey); // Remove old key
+        console.log("🔄 Migrated toy from old format:", toy);
+      }
+      
+      // If LOCAL doesn't have it, create it
+      if (!localStorage.getItem(key)) {
+        if (toy === 'profile') {
+          const profileData = JSON.stringify({ 
+            uid, 
+            role: role,
+            createdAt: new Date().toISOString(),
+            lastSynced: null
+          });
+          localStorage.setItem(key, profileData);
+        } else {
+          localStorage.setItem(key, JSON.stringify([]));
+        }
+        console.log("🎮 Created LOCAL toy:", toy, "with key:", key);
+      }
+    }
+    
+    console.log("✅ Basic toys ready in localStorage!");
+  }
+
+  // ---------------------- MIRROR: LOCAL → CLOUD ----------------------
+  async function mirrorLocalToCloud(uid, toyName, role = 'buyer') {
+    const key = nsKey(toyName, role, uid);
+    const localValue = localStorage.getItem(key);
+    
+    if (!localValue) return;
+    
+    try {
+      // Use consistent Firestore path: users/{uid}/toys/{toyName}__{role}
+      const firestorePath = `${toyName}__${role}`;
+      await setDoc(doc(firestore, 'users', uid, 'toys', firestorePath), {
+        value: localValue,
+        key: key,
+        toyName: toyName,
+        role: role,
+        uid: uid,
+        updatedAt: serverTimestamp(),
+        localUpdated: new Date().toISOString()
+      });
+      console.log("💾 Saved to cloud:", toyName, "role:", role);
+    } catch (error) {
+      console.log("💾 Cloud save failed:", toyName, error.message);
+    }
+  }
+
+  // ---------------------- RESTORE: CLOUD → LOCAL ----------------------
+  async function restoreCloudToLocal(uid, toyName, role = 'buyer') {
+    const key = nsKey(toyName, role, uid);
+    const oldKey = `${toyName}_${uid}`; // Check old format too
+    
+    // Only restore if local is empty (check both new and old formats)
+    if (localStorage.getItem(key) || localStorage.getItem(oldKey)) return;
+    
+    try {
+      // Try new format first: users/{uid}/toys/{toyName}__{role}
+      const firestorePath = `${toyName}__${role}`;
+      let docSnap = await getDoc(doc(firestore, 'users', uid, 'toys', firestorePath));
+      
+      // Fallback to old format for migration
+      if (!docSnap.exists()) {
+        docSnap = await getDoc(doc(firestore, 'users', uid, 'toys', toyName));
+        if (docSnap.exists()) {
+          const cloudData = docSnap.data();
+          localStorage.setItem(key, cloudData.value);
+          console.log("📥 Migrated from cloud (old format):", toyName);
+          return;
+        }
+      }
+      
+      if (docSnap.exists()) {
+        const cloudData = docSnap.data();
+        localStorage.setItem(key, cloudData.value);
+        console.log("📥 Loaded from cloud:", toyName, "role:", role);
+      }
+    } catch (error) {
+      console.log("📥 Cloud load failed:", toyName, error.message);
+    }
+  }
+
+  // ---------------------- START CLOUD SYNC (AFTER APPROVAL) ----------------------
+  async function startCloudSync(uid, role = 'buyer') {
+    console.log("💾 Starting cloud sync for user:", uid, "role:", role);
+    
+    // 1. Load any missing toys from cloud
+    for (const toy of ALL_TOYS) {
+      await restoreCloudToLocal(uid, toy, role);
+    }
+    
+    // 2. Setup auto-save when localStorage changes
+    const originalSetItem = localStorage.setItem;
+    
+    localStorage.setItem = function(key, value) {
+      originalSetItem.call(this, key, value);
+      
+      // Auto-save to cloud when toys change (check namespaced keys)
+      ALL_TOYS.forEach(toy => {
+        const expectedKey = nsKey(toy, role, uid);
+        if (key === expectedKey) {
+          // Debounce cloud sync
+          clearTimeout(startCloudSync._timers?.[key]);
+          if (!startCloudSync._timers) startCloudSync._timers = {};
+          startCloudSync._timers[key] = setTimeout(() => {
+            mirrorLocalToCloud(uid, toy, role);
+          }, 500);
+        }
+      });
+    };
+    
+    // 3. Listen for cloud updates from other devices
+    ALL_TOYS.forEach(toy => {
+      // Use consistent Firestore path: users/{uid}/toys/{toyName}__{role}
+      const firestorePath = `${toy}__${role}`;
+      const docRef = doc(firestore, 'users', uid, 'toys', firestorePath);
+      
+      onSnapshot(docRef, (docSnap) => {
+        if (!docSnap.exists()) return;
+        
+        const cloudData = docSnap.data();
+        const key = nsKey(toy, role, uid);
+        const localValue = localStorage.getItem(key);
+        
+        // Update if cloud has newer data
+        const cloudTime = cloudData.updatedAt?.toMillis?.() || 0;
+        const localTime = parseInt(localStorage.getItem(`${key}_timestamp`) || '0', 10);
+        
+        if (cloudTime > localTime) {
+          localStorage.setItem(key, cloudData.value);
+          localStorage.setItem(`${key}_timestamp`, cloudTime.toString());
+          console.log("🔄 Cloud update:", toy, "role:", role);
+          
+          // Dispatch event for pages to react
+          window.dispatchEvent(new CustomEvent('toySynced', { 
+            detail: { toy, role, key, data: JSON.parse(cloudData.value) }
+          }));
+        }
+      }, (error) => {
+        console.log("🔄 Cloud sync listener error:", toy, error.message);
+      });
+    });
+    
+    console.log("✅ Cloud sync running!");
+  }
+
+  // 🔐 Handle sign-in logic (CORRECT ORDER)
+  async function signIn(email, password) {
+    const loginBtn = document.getElementById("loginBtn");
+    if (!loginBtn) return;
+
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Signing in...";
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const uid = user.uid;
+      sessionStorage.setItem("uid", uid);
+      
+      // 🎯 STEP 1: RTDB CHECK FIRST (PERMISSION GATE)
+      const userRef = ref(db, 'users/' + uid);
+      const snapshot = await get(userRef);
+
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const role = data.role || "user";
+        sessionStorage.setItem("userRole", role);
+
+        // Check permissions BEFORE anything else
+        if (role === "admin" || role === "moderator" || role === "superadmin") {
+          window.location.href = "adminlogic/approve.html";
+          return;
+        }
+
+        if (data.banned === true) {
+          window.location.href = "adminlogic/banned/banned.html";
+          return;
+        }
+
+        if (data.declined === true) {
+          window.location.href = "adminlogic/declined/declined.html";
+          return;
+        }
+
+        // 🎯 STEP 2: USER IS APPROVED! CREATE LOCAL TOYS
+        // Use 'buyer' as default role for login page (most users are buyers)
+        const defaultRole = 'buyer';
+        createBasicToys(uid, defaultRole); // localStorage toys only
+        
+        // 🎯 STEP 3: START CLOUD SYNC (GAME SAVE)
+        await startCloudSync(uid, defaultRole); // Now safe to sync
+        
+        // Setup global functions for other pages (backward compatible)
+        window.updateToy = async (toyName, data, userRole = defaultRole) => {
+          if (!ALL_TOYS.includes(toyName)) return;
+          const key = nsKey(toyName, userRole, uid);
+          const value = JSON.stringify(data);
+          localStorage.setItem(key, value);
+          localStorage.setItem(`${key}_timestamp`, Date.now().toString());
+          await mirrorLocalToCloud(uid, toyName, userRole); // Auto-save
+        };
+        
+        window.getToy = (toyName, userRole = defaultRole) => {
+          if (!ALL_TOYS.includes(toyName)) return null;
+          const key = nsKey(toyName, userRole, uid);
+          const value = localStorage.getItem(key);
+          return value ? JSON.parse(value) : (toyName === 'profile' ? {uid, role: userRole} : []);
+        };
+
+        // Redirect based on approval status
+        if (data.approved === true) {
+          window.location.href = "home/home.html";
+        } 
+        else if (data.approved === false) {
+          window.location.href = "pending/stillpending.html";
+        } 
+        else {
+          window.location.href = "formpage/form.html";
+        }
+      } else {
+        // No user data in DB
+        window.location.href = "formpage/form.html";
+      }
+
+    } catch (error) {
+      console.warn("Sign-in error:", error.code);
+      const errorMessages = {
+        "auth/invalid-login-credentials": "Oops! Invalid email or password. Please try again.",
+        "auth/user-not-found": "No account found with this email. Want to sign up instead?",
+        "auth/wrong-password": "That password doesn't seem right. Try again or reset it.",
+        "auth/too-many-requests": "Too many attempts. Please wait a bit and try again.",
+        "auth/network-request-failed": "Looks like you're offline. Please check your connection.",
+      };
+      alert(errorMessages[error.code] || `Login failed: ${error.message}`);
+    } finally {
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Sign In";
+    }
+  }
+
+  // 🧾 Attach event listener to login form
+  document.getElementById("loginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
+    signIn(email, password);
+  });
+
+</script>
+</body>
+</html>
